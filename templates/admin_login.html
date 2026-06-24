@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login - PixelTruth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="login-page">
+    <div class="login-card">
+        <h1>Admin <span>Panel</span></h1>
+        <p>PixelTruth Administrator Login</p>
+
+        {% if error %}
+        <div class="error-box">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Admin Username" required>
+            <input type="password" name="password" placeholder="Admin Password" required>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <div class="bottom-link">
+            <a href="{{ url_for('welcome') }}">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

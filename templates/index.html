@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PixelTruth Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="top-nav">
+    <div class="brand">
+        <div class="logo-circle">PT</div>
+        <div>
+            <h3>PIXELTRUTH</h3>
+            <span>AI Image Authenticity Verification</span>
+        </div>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="nav-btn">Logout</a>
+</nav>
+
+<!-- MAIN DASHBOARD -->
+<div class="analysis-shell">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+
+        <div class="upload-card">
+            <h2>⚡ PixelTruth Core</h2>
+            <p class="cyan">Deepfake image detection using CNN</p>
+
+            <form method="POST" enctype="multipart/form-data" class="analysis-form" id="analysisForm">
+
+                <input type="file" name="image" id="imageInput" accept="image/*" required>
+
+                <div class="scan-image-box">
+
+                    {% if image_path %}
+                        <img src="{{ url_for('static', filename=image_path.replace('static/', '').replace('\\', '/')) }}"
+                             class="scan-main-img"
+                             id="previewImage"
+                             alt="Uploaded Image">
+                    {% else %}
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <h2>NO IMAGE SELECTED</h2>
+                            <p>Uploaded image preview will appear here</p>
+                        </div>
+
+                        <img id="previewImage" class="scan-main-img" style="display:none;" alt="Preview Image">
+                    {% endif %}
+
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+
+                    <div class="scanning-overlay" id="scanningOverlay"></div>
+                    <div class="scanner-line" id="scannerLine"></div>
+                    <div class="scan-depth">CNN SCAN ACTIVE</div>
+                </div>
+
+                <video id="camera" autoplay></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+
+                <div class="button-row">
+                    <button type="button" class="secondary-btn" id="openCameraBtn">Open Camera</button>
+                    <button type="button" class="secondary-btn" id="captureBtn">Capture Photo</button>
+                </div>
+
+                <button type="submit" class="primary-btn">Analyze Image</button>
+
+            </form>
+        </div>
+
+        <div class="logs-box">
+            <h3>{ } Process Logs</h3>
+            <p>> Model loaded: ResNet18 CNN</p>
+            <p>> Dataset: 140K Real and Fake Faces</p>
+            <p>> Status: Ready for image analysis</p>
+
+            {% if prediction %}
+                <p>> Prediction completed successfully</p>
+                <p>> Result: {{ prediction }}</p>
+                <p>> Confidence: {{ confidence }}%</p>
+                <p>> Grad-CAM heatmap generated</p>
+            {% else %}
+                <p>> Processing image data...</p>
+                <p>> Extracting CNN features...</p>
+                <p>> Waiting for uploaded image...</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+        {% if prediction %}
+        <div class="side-card result-card">
+            <h3>Prediction Result</h3>
+            <h1>{{ prediction }}</h1>
+            <p><b>Confidence Score:</b> {{ confidence }}%</p>
+        </div>
+        {% else %}
+        <div class="side-card">
+            <h3>Prediction Result</h3>
+            <p>No image analyzed yet.</p>
+            <p>Upload an image and click Analyze Image.</p>
+        </div>
+        {% endif %}
+
+        {% if heatmap_path %}
+        <div class="side-card">
+            <h3>🔥 Grad-CAM Heatmap</h3>
+            <img src="{{ url_for('static', filename=heatmap_path.replace('static/', '').replace('\\', '/')) }}"
+                 class="result-img"
+                 alt="Grad-CAM Heatmap">
+        </div>
+
+        <div class="side-card heatmap-legend">
+            <h4>🎨 Heatmap Color Interpretation</h4>
+
+            <div class="legend-item">
+                <span class="color-box red"></span>
+                <p><b>Red / Orange</b> → Highly suspicious region. Strong influence on prediction.</p>
+            </div>
+
+            <div class="legend-item">
+                <span class="color-box yellow"></span>
+                <p><b>Yellow</b> → Moderately important region. Important facial features.</p>
+            </div>
+
+            <div class="legend-item">
+                <span class="color-box green"></span>
+                <p><b>Green</b> → Low suspicion region. Slight model influence.</p>
+            </div>
+
+            <div class="legend-item">
+                <span class="color-box blue"></span>
+                <p><b>Blue / Purple</b> → Least important region. Minimal influence.</p>
+            </div>
+
+            <p class="legend-note">
+                Grad-CAM shows where the CNN focused during prediction. It does not always show the exact edited area.
+            </p>
+        </div>
+        {% endif %}
+
+        <div class="side-card">
+            <h3>Analysis Pipeline</h3>
+
+            <div class="phase-item complete">
+                <div><span class="phase-dot"></span> Image Upload</div>
+                <span class="phase-status">READY</span>
+            </div>
+
+            <div class="phase-item complete">
+                <div><span class="phase-dot"></span> Preprocessing</div>
+                <span class="phase-status">ACTIVE</span>
+            </div>
+
+            {% if prediction %}
+            <div class="phase-item complete">
+                <div><span class="phase-dot"></span> CNN Analysis</div>
+                <span class="phase-status">COMPLETE</span>
+            </div>
+
+            <div class="phase-item complete">
+                <div><span class="phase-dot"></span> Result Output</div>
+                <span class="phase-status">COMPLETE</span>
+            </div>
+            {% else %}
+            <div class="phase-item active">
+                <div><span class="phase-dot pulse"></span> CNN Analysis</div>
+                <span class="phase-status">ONLINE</span>
+            </div>
+
+            <div class="phase-item waiting">
+                <div><span class="phase-dot waiting-dot"></span> Result Output</div>
+                <span class="phase-status">WAITING</span>
+            </div>
+            {% endif %}
+
+            <div class="scan-progress">
+                {% if prediction %}
+                    <div class="scan-progress-fill" style="width:100%; animation:none;"></div>
+                {% else %}
+                    <div class="scan-progress-fill"></div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

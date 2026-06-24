@@ -1,0 +1,14 @@
+dataset/
+dataset_v2/
+dataset_v2_split/
+Dataset_old/
+checkpoints/
+
+*.pth
+*.pt
+*.safetensors
+
+__pycache__/
+
+static/uploads/
+static/heatmaps/

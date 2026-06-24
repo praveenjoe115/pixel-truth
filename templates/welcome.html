@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PixelTruth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="top-nav">
+    <div class="brand">
+        <div class="logo-circle">PT</div>
+        <div>
+            <h3>PIXELTRUTH</h3>
+            <span>VERSION 2.0</span>
+        </div>
+    </div>
+
+    <a href="{{ url_for('login') }}" class="nav-btn">LOGIN</a>
+</nav>
+
+<div class="notice">
+    Welcome to PixelTruth - AI Powered Authentic vs Manipulated Image Detection System
+</div>
+
+<section class="home-hero">
+    <div class="home-left">
+        <h1>
+            PIXELTRUTH<br>
+            IMAGE<br>
+            <span>AUTHENTICITY</span>
+        </h1>
+
+        <div class="version-pill">● DEEP LEARNING DETECTOR</div>
+
+        <p>
+            Detect AI-generated, manipulated and deepfake images using advanced CNN models,
+            confidence scoring and Grad-CAM heatmaps.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="{{ url_for('login') }}" class="primary-link">BEGIN ANALYSIS ⚡</a>
+            <a href="#features" class="secondary-link">LEARN MORE</a>
+        </div>
+    </div>
+
+    <div class="home-right">
+        <div class="ai-card">
+            <h2>PIXELTRUTH AI</h2>
+            <h4>Authentic vs Manipulated Detection</h4>
+
+            <p>
+                Upload an image and let PixelTruth analyze visual patterns,
+                facial inconsistencies and manipulation traces.
+            </p>
+
+            <div class="mini-grid">
+                <div>🖼 Image Analysis</div>
+                <div>🔥 Heatmap</div>
+                <div>📊 Confidence</div>
+                <div>🧠 CNN Detection</div>
+            </div>
+
+            <div class="info-box">
+                <h3>AI VERIFICATION ENGINE</h3>
+                <p>
+                    PixelTruth classifies images as Authentic or Manipulated
+                    and highlights suspicious regions using Grad-CAM.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section" id="features">
+    <h1>ADVANCED CAPABILITIES</h1>
+    <p>PixelTruth combines deep learning and explainable AI for image authenticity verification.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h2>🖼 Image Analysis</h2>
+            <p>Detects authentic and manipulated image patterns using trained CNN models.</p>
+        </div>
+
+        <div class="feature-card">
+            <h2>🔥 Grad-CAM Heatmap</h2>
+            <p>Highlights suspicious image regions when manipulation is detected.</p>
+        </div>
+
+        <div class="feature-card">
+            <h2>📊 Confidence Score</h2>
+            <p>Displays confidence percentage for better decision making.</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - PixelTruth</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="top-nav">
+    <div class="brand">
+        <div class="logo-circle">AD</div>
+        <div>
+            <h3>ADMIN DASHBOARD</h3>
+            <span>PixelTruth Management Panel</span>
+        </div>
+    </div>
+
+    <a href="{{ url_for('admin_logout') }}" class="nav-btn">Logout</a>
+</nav>
+
+<div class="analysis-shell" style="grid-template-columns:1fr; max-width:1400px;">
+
+    <div class="side-card">
+        <h3>Registered Users</h3>
+
+        <table class="admin-table">
+            <tr>
+                <th>ID</th>
+                <th>Full Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Created At</th>
+            </tr>
+
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.fullname }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="side-card">
+        <h3>Uploaded Images & Detection Results</h3>
+
+        <table class="admin-table">
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Uploaded Image</th>
+                <th>Prediction</th>
+                <th>Confidence</th>
+                <th>Heatmap</th>
+                <th>Created At</th>
+            </tr>
+
+            {% for detection in detections %}
+            <tr>
+                <td>{{ detection.id }}</td>
+                <td>{{ detection.username }}</td>
+
+                <td>
+                    {% if detection.image_path %}
+                    <img src="{{ url_for('static', filename=detection.image_path.replace('static/', '').replace('\\', '/')) }}"
+                         class="admin-img">
+                    {% endif %}
+                    <br>{{ detection.image_name }}
+                </td>
+
+                <td>{{ detection.prediction }}</td>
+                <td>{{ detection.confidence }}%</td>
+
+                <td>
+                    {% if detection.heatmap_path %}
+                    <img src="{{ url_for('static', filename=detection.heatmap_path.replace('static/', '').replace('\\', '/')) }}"
+                         class="admin-img">
+                    {% else %}
+                    No heatmap
+                    {% endif %}
+                </td>
+
+                <td>{{ detection.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
